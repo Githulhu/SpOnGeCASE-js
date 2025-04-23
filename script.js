@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const convertButton = document.getElementById('convertButton');
     const copyButton = document.getElementById('copyButton');
     const clearButton = document.getElementById('clearButton');
+    const spongeimage = document.getElementById('spongebob');
 
     function sponge(s) {
         let result = '';
@@ -19,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     convertButton.addEventListener('click', () => {
-        outputText.value = sponge(inputText.value)
+        outputText.value = sponge(inputText.value);
+        spongeimage.style.visibility = 'visible';
     });
 
     copyButton.addEventListener('click', () => {
@@ -34,5 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     clearButton.addEventListener('click', () => {
         inputText.value = '';
         outputText.value = '';
+        spongeimage.style.visibility = 'hidden';
     });
 });
