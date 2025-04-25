@@ -1,3 +1,8 @@
+// Funktion, um zu überprüfen, ob das Gerät ein Mobilgerät ist
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const inputText = document.getElementById('inputText');
     const outputText = document.getElementById('outputText');
@@ -5,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyButton = document.getElementById('copyButton');
     const clearButton = document.getElementById('clearButton');
     const spongeimage = document.getElementById('spongebob');
+    const installButton = document.getElementById('installButton');
 
     function sponge(s) {
         let result = '';
@@ -38,4 +44,45 @@ document.addEventListener('DOMContentLoaded', () => {
         outputText.value = '';
         spongeimage.style.visibility = 'hidden';
     });
+
+    // Überprüfen, ob die App im Standalone-Modus läuft oder nicht auf einem Mobilgerät ist
+    if (window.matchMedia('(display-mode: standalone)').matches || !isMobileDevice()) {
+        installButton.style.display = 'none';
+    } else {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Speichere das Ereignis, um es später auszulösen
+            deferredPrompt = e;
+            // Zeige den Installationsbutton an
+            installButton.style.display = 'block';
+
+            installButton.addEventListener('click', () => {
+                // Verstecke den Button
+                installButton.style.display = 'none';
+                // Zeige den Installationsprompt
+                deferredPrompt.prompt();
+                // Warte auf die Antwort des Nutzers
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+    }
 });
+
+// Registrierung des Service Workers
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function(error) {
+            console.error('Service Worker registration failed:', error);
+        });
+}

@@ -1,0 +1,16 @@
+{
+    "name": "SpOnGeCASE",
+    "short_name": "SpOnGe",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#123456",
+    "description": "Writes your text EvEn MoRe SmArT!",
+    "icons": [
+      {
+        "src": "icon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
+  }
+  
