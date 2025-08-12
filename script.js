@@ -25,7 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return result;
     }
 
+    function test_for_sponge(s){
+        if(s.value && s.value.trim().length > 0) {
+            return true;
+        }
+        return false;
+    }
+
     convertButton.addEventListener('click', () => {
+        //if (test_for_sponge):
         outputText.value = sponge(inputText.value);
         spongeimage.style.visibility = 'visible';
     });

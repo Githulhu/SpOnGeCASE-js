@@ -41,6 +41,8 @@ textarea {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .button-74:hover {
