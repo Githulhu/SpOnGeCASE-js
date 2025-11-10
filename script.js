@@ -3,6 +3,9 @@ function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
 }
 
+// Variable für das deferred install prompt
+let deferredPrompt;
+
 document.addEventListener('DOMContentLoaded', () => {
     const inputText = document.getElementById('inputText');
     const outputText = document.getElementById('outputText');
@@ -57,31 +60,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.matchMedia('(display-mode: standalone)').matches || !isMobileDevice()) {
         installButton.style.display = 'none';
     } else {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
-            e.preventDefault();
-            // Speichere das Ereignis, um es später auszulösen
-            deferredPrompt = e;
-            // Zeige den Installationsbutton an
-            installButton.style.display = 'block';
-
-            installButton.addEventListener('click', () => {
-                // Verstecke den Button
-                installButton.style.display = 'none';
-                // Zeige den Installationsprompt
-                deferredPrompt.prompt();
-                // Warte auf die Antwort des Nutzers
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the A2HS prompt');
-                    } else {
-                        console.log('User dismissed the A2HS prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        });
+        // Zeige den Install-Button an
+        installButton.style.display = 'block';
     }
+
+    // Event-Listener für beforeinstallprompt registrieren
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Speichere das Ereignis, um es später auszulösen
+        deferredPrompt = e;
+        // Zeige den Installationsbutton an
+        installButton.style.display = 'block';
+    });
+
+    // Click-Handler für den Install-Button
+    installButton.addEventListener('click', () => {
+        // Prüfe ob deferredPrompt verfügbar ist
+        if (!deferredPrompt) {
+            console.log('Install prompt not available');
+            return;
+        }
+        // Verstecke den Button
+        installButton.style.display = 'none';
+        // Zeige den Installationsprompt
+        deferredPrompt.prompt();
+        // Warte auf die Antwort des Nutzers
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+            } else {
+                console.log('User dismissed the A2HS prompt');
+            }
+            deferredPrompt = null;
+        });
+    });
 });
 
 // Registrierung des Service Workers
