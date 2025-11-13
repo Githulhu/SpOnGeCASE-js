@@ -1,9 +1,11 @@
 {
     "name": "SpOnGeCASE",
     "short_name": "SpOnGe",
-    "start_url": ".",
+    "start_url": "./",
+    "scope": "./",
     "display": "standalone",
     "background_color": "#123456",
+    "theme_color": "#123456",
     "description": "Writes your text EvEn MoRe SmArT!",
     "icons": [
       {
